@@ -25,26 +25,20 @@ public class Heist{
     }
 
     public void robbBank() {
-        boolean robberyComplete = false;
-        while(!robberyComplete) {
-            String[] moneyToRobb = bank.openSafeUnderGunpoint();
-            if(moneyToRobb != null && moneyToRobb.length > 0) {
-                int randomStealingCapacity = new Random().nextInt(moneyToRobb.length);
-                System.out.println("Team " + name + " can only steal " + randomStealingCapacity + " money bags.");
-                moneyToRobb = Arrays.copyOfRange(moneyToRobb, 0, randomStealingCapacity);
+        String[] moneyToRobb = bank.openSafeUnderGunpoint();
+        if (moneyToRobb != null && moneyToRobb.length > 0) {
+            int randomStealingCapacity = new Random().nextInt(moneyToRobb.length + 1);
+            System.out.println("Team " + name + " can only steal " + randomStealingCapacity + " money bags.");
+            moneyToRobb = Arrays.copyOfRange(moneyToRobb, 0, randomStealingCapacity);
 
-                Logistics logistics = new Logistics(moneyToRobb, bank);
-                ForkJoinPool forkJoinPool = new ForkJoinPool(teamSize);
-                forkJoinPool.invoke(logistics);
+            Logistics logistics = new Logistics(moneyToRobb, bank);
+            ForkJoinPool forkJoinPool = new ForkJoinPool(teamSize);
+            forkJoinPool.invoke(logistics);
 
-                bank.wrapUp();
-                robberyComplete = true;
-            } else {
-                System.out.println("No more money to steal! Waiting for the bank to get more money!");
-            }
+            bank.wrapUp();
+        } else {
+            System.out.println("No money to steal! Canceling Heist!");
         }
-
-
     }
 
 
