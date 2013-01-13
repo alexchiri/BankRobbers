@@ -34,11 +34,11 @@ public class Heist implements Runnable{
             Logistics logistics = new Logistics(moneyToRobb, bank);
             ForkJoinPool forkJoinPool = new ForkJoinPool(teamSize);
             forkJoinPool.invoke(logistics);
-
-            bank.wrapUp();
         } else {
             System.out.println("No money to steal! Canceling Heist!");
         }
+
+        bank.wrapUp();
     }
 
     @Override
