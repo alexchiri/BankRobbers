@@ -1,12 +1,15 @@
 package com.alexchiri.bank;
 
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Alexandru Chiritescu
  * 13-1-13
  */
 public class Bank {
+    Lock LOCK = new ReentrantLock();
     private Safe safe;
     private String name;
 
@@ -17,7 +20,8 @@ public class Bank {
     }
 
     public String[] openSafeUnderGunpoint() {
-        System.out.println("(Bank:" + name + ") Opening safe under gunpoint for " + Thread.currentThread().getName());
+        LOCK.lock();
+        System.out.println("\n(Bank:" + name + ") Opening safe under gunpoint for '" + Thread.currentThread().getName() + "'");
         return safe.keySet().toArray(new String[0]);
     }
 
@@ -32,5 +36,6 @@ public class Bank {
 
     public void wrapUp() {
         System.out.println("(Bank:" + name + ") Robbery ended and in the Safe we have " + safe.size() + " money bags left!");
+        LOCK.unlock();
     }
 }

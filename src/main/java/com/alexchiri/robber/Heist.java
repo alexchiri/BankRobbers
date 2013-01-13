@@ -11,7 +11,7 @@ import java.util.concurrent.RecursiveAction;
  * Alexandru Chiritescu
  * 13-1-13
  */
-public class Heist{
+public class Heist implements Runnable {
     private final static int ROBBER_CAPACITY = 2;
     private int teamSize;
     private String name;
@@ -25,26 +25,26 @@ public class Heist{
     }
 
     public void robbBank() {
-        boolean robberyComplete = false;
-        while(!robberyComplete) {
-            String[] moneyToRobb = bank.openSafeUnderGunpoint();
-            if(moneyToRobb != null && moneyToRobb.length > 0) {
-                int randomStealingCapacity = new Random().nextInt(moneyToRobb.length);
-                System.out.println("Team " + name + " can only steal " + randomStealingCapacity + " money bags.");
-                moneyToRobb = Arrays.copyOfRange(moneyToRobb, 0, randomStealingCapacity);
+        String[] moneyToRobb = bank.openSafeUnderGunpoint();
+        if (moneyToRobb != null && moneyToRobb.length > 0) {
+            int randomStealingCapacity = new Random().nextInt(moneyToRobb.length + 1);
+            System.out.println("Team " + name + " can only steal " + randomStealingCapacity + " money bags.");
+            moneyToRobb = Arrays.copyOfRange(moneyToRobb, 0, randomStealingCapacity);
 
-                Logistics logistics = new Logistics(moneyToRobb, bank);
-                ForkJoinPool forkJoinPool = new ForkJoinPool(teamSize);
-                forkJoinPool.invoke(logistics);
+            Logistics logistics = new Logistics(moneyToRobb, bank);
+            ForkJoinPool forkJoinPool = new ForkJoinPool(teamSize);
+            forkJoinPool.invoke(logistics);
 
-                bank.wrapUp();
-                robberyComplete = true;
-            } else {
-                System.out.println("No more money to steal! Waiting for the bank to get more money!");
-            }
+            bank.wrapUp();
+        } else {
+            System.out.println("No money to steal! Canceling Heist!");
         }
+    }
 
-
+    @Override
+    public void run() {
+        Thread.currentThread().setName(name);
+        robbBank();
     }
 
 
@@ -59,7 +59,7 @@ public class Heist{
 
         @Override
         protected void compute() {
-            if(moneyBagsToRobb.length <= ROBBER_CAPACITY) {
+            if (moneyBagsToRobb.length <= ROBBER_CAPACITY) {
                 bank.removeMoneyFromSafe(moneyBagsToRobb);
             } else {
                 int half = moneyBagsToRobb.length / 2;
