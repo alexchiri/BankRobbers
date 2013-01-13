@@ -11,18 +11,20 @@ import java.util.concurrent.RecursiveAction;
  * Alexandru Chiritescu
  * 13-1-13
  */
-public class RobberyTeam {
+public class Heist{
     private final static int ROBBER_CAPACITY = 2;
-    private int size;
+    private int teamSize;
     private String name;
+    private Bank bank;
 
-    public RobberyTeam(String name, int size) {
+    public Heist(String name, int size, Bank bank) {
         System.out.println("Team " + name + " is ready to go!");
-        this.size = size;
+        this.teamSize = size;
         this.name = name;
+        this.bank = bank;
     }
 
-    public void robb(Bank bank) {
+    public void robbBank() {
         boolean robberyComplete = false;
         while(!robberyComplete) {
             String[] moneyToRobb = bank.openSafeUnderGunpoint();
@@ -32,13 +34,13 @@ public class RobberyTeam {
                 moneyToRobb = Arrays.copyOfRange(moneyToRobb, 0, randomStealingCapacity);
 
                 Logistics logistics = new Logistics(moneyToRobb, bank);
-                ForkJoinPool forkJoinPool = new ForkJoinPool(size);
+                ForkJoinPool forkJoinPool = new ForkJoinPool(teamSize);
                 forkJoinPool.invoke(logistics);
 
                 bank.wrapUp();
                 robberyComplete = true;
             } else {
-                System.out.println("No more money to steal! Waiting for bank to get more money!");
+                System.out.println("No more money to steal! Waiting for the bank to get more money!");
             }
         }
 

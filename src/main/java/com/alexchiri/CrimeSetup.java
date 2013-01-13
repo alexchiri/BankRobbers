@@ -2,7 +2,7 @@ package com.alexchiri;
 
 import com.alexchiri.bank.Bank;
 import com.alexchiri.bank.MoneyBag;
-import com.alexchiri.robber.RobberyTeam;
+import com.alexchiri.robber.Heist;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class CrimeSetup {
 
         Bank bank = new Bank(moneyBags, "Cool bank");
 
-        RobberyTeam team = new RobberyTeam("Skeets", 5);
-        team.robb(bank);
+        Heist heist = new Heist("Skeets", 5, bank);
+        heist.robbBank();
     }
 }
