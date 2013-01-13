@@ -11,7 +11,7 @@ import java.util.concurrent.RecursiveAction;
  * Alexandru Chiritescu
  * 13-1-13
  */
-public class Heist implements Runnable {
+public class Heist{
     private final static int ROBBER_CAPACITY = 2;
     private int teamSize;
     private String name;
