@@ -15,7 +15,7 @@ import java.util.Random;
 public class CrimeSetup {
     public static void main(String[] args) {
         List<MoneyBag> moneyBags = new ArrayList<MoneyBag>();
-        int randomNumber = Math.abs(new Random().nextInt(10));
+        int randomNumber = Math.abs(new Random().nextInt(100));
         System.out.println("Random number of money bags to load the safe with: " + randomNumber);
 
         for(int i = 0; i< randomNumber; i++) {
